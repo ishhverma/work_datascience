@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Simple Regex Tester</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 50px; }
+    input, textarea, button { display: block; margin: 10px 0; width: 100%; padding: 8px; }
+    .matches { margin-top: 20px; }
+    .match { background-color: #f0f0f0; padding: 5px; margin: 3px 0; }
+    label { font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Simple Regex Tester</h1>
+
+  <label for="testString">Enter Test String:</label>
+  <textarea id="testString" rows="4" placeholder="Type your text here..."></textarea>
+
+  <label for="regex">Enter Regex Pattern (e.g., \d+ to find numbers):</label>
+  <input type="text" id="regex" placeholder="Please enter a regex pattern" value="\d+">
+
+  <label for="flags">Regex Flags (optional):</label>
+  <input type="text" id="flags" placeholder="e.g., g for global, i for case-insensitive">
+
+  <button id="submitBtn">Submit</button>
+
+  <div class="matches" id="matches"></div>
+
+  <script>
+    document.getElementById('submitBtn').addEventListener('click', function() {
+        const matchesDiv = document.getElementById('matches');
+        matchesDiv.innerHTML = ''; // clear previous results
+
+        const testString = document.getElementById('testString').value;
+        const regexInput = document.getElementById('regex').value.trim();
+        const flags = document.getElementById('flags').value.trim();
+
+        if (!regexInput) {
+            alert('Please enter a regex pattern! For example, \\d+ to match numbers.');
+            return;
+        }
+
+        try {
+            // Create RegExp object; default to global search if no flag provided
+            const regex = new RegExp(regexInput, flags || 'g');
+            const matches = testString.match(regex);
+
+            if (matches && matches.length > 0) {
+                matches.forEach(match => {
+                    const div = document.createElement('div');
+                    div.className = 'match';
+                    div.textContent = match;
+                    matchesDiv.appendChild(div);
+                });
+            } else {
+                matchesDiv.textContent = 'No matches found.';
+            }
+        } catch (error) {
+            alert('Invalid regex pattern: ' + error.message);
+        }
+    });
+  </script>
+</body>
+</html>
